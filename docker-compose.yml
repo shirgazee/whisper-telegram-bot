@@ -1,0 +1,10 @@
+﻿services:
+  whisperbot:
+    image: whisperbot
+    build:
+      context: .
+      dockerfile: WhisperBot/Dockerfile
+    env_file:
+      - .env
+      - .env.override
+    restart: always

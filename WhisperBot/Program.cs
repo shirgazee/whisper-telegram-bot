@@ -72,15 +72,25 @@ async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, Cancellation
             return;
     }
     var chatId = message.Chat.Id;
-    Message sentMessage = await bot.SendTextMessageAsync(
-        chatId: chatId,
-        text: "...",
-        cancellationToken: cancellationToken);
-
-    var parsedText = await processTask;
     
-    await bot.EditMessageTextAsync(chatId: chatId, messageId: sentMessage.MessageId, text: parsedText,
-        cancellationToken: cancellationToken);
+    try
+    {
+        Message sentMessage = await bot.SendTextMessageAsync(
+            chatId: chatId,
+            text: "...",
+            cancellationToken: cancellationToken);
+
+        var parsedText = await processTask;
+
+        await bot.EditMessageTextAsync(chatId: chatId, messageId: sentMessage.MessageId, text: parsedText,
+            cancellationToken: cancellationToken);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        await bot.SendTextMessageAsync(chatId: chatId, text: $"Unable to parse text: {e.Message}",
+            cancellationToken: cancellationToken);
+    }
 }
 
 Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)

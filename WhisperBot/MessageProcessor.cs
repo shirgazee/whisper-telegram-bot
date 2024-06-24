@@ -70,6 +70,7 @@ public class MessageProcessor
         fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("audio/mpeg");
         form.Add(fileContent, "file", Path.GetFileName(filePath));
         form.Add(new StringContent("whisper-1"), "model");
+        form.Add(new StringContent("language"), "ru");
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _openApiKey);
 
